@@ -1,7 +1,7 @@
-import { View, Text } from "react-native";
-import React from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
 import { Tabs } from "expo-router";
-import { useTheme } from "react-native-paper";
+import { Button, useTheme } from "react-native-paper";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const TabLayout = () => {
@@ -58,7 +58,17 @@ const TabLayout = () => {
       })}
     >
       <Tabs.Screen name="index" options={{ title: "Chats" }} />
-      <Tabs.Screen name="profile" options={{ title: "Profile" }} />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          headerRight: () => (
+            <TouchableOpacity style={{ padding: 10 }}>
+              <MaterialIcons name="settings" size={30} color={"white"} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
     </Tabs>
   );
 };
