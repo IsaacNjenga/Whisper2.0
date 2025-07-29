@@ -9,16 +9,18 @@ import {
 import React, { useLayoutEffect, useState } from "react";
 import bgImg from "@/assets/images/bg.jpeg";
 import { BlurView } from "expo-blur";
-import { Avatar, Button, TextInput, useTheme } from "react-native-paper";
+import { Avatar, Button, useTheme } from "react-native-paper";
 import SettingsDrawer from "@/components/SettingsDrawer";
 import { useNavigation } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import EditProfile from "@/components/EditProfile";
 
 const ProfileScreen = () => {
   const { colors } = useTheme();
   const navigation = useNavigation();
 
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const [editVisible, setEditVisible] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -44,7 +46,7 @@ const ProfileScreen = () => {
           >
             <BlurView
               intensity={90}
-              tint="light"
+              tint="dark"
               style={StyleSheet.absoluteFill}
             />
             <View style={styles.avatar}>
@@ -59,8 +61,14 @@ const ProfileScreen = () => {
                 @John Doe
               </Text>
 
-              <Button mode="elevated" style={{ marginTop: 10 }}>
-                Change Image
+              <Button
+                mode="contained-tonal"
+                style={{ marginTop: 10 }}
+                icon={"camera"}
+              >
+                <Text style={{ fontSize: 15, color: "#fff" }}>
+                  Change Image
+                </Text>
               </Button>
             </View>
             <View style={styles.formContainer}>
@@ -82,17 +90,31 @@ const ProfileScreen = () => {
               </View>
 
               <View style={styles.buttonView}>
-                <Button mode="contained-tonal">Update Details</Button>
+                <Button
+                  mode="contained-tonal"
+                  icon={"account-edit"}
+                  onPress={() => setEditVisible(true)}
+                >
+                  <Text style={{ fontSize: 15, color: "#fff" }}>
+                    Edit Profile
+                  </Text>
+                </Button>
               </View>
             </View>
           </ImageBackground>
         </View>
       </ScrollView>
 
+      <EditProfile
+        visible={editVisible}
+        onClose={() => setEditVisible(false)}
+      />
+
       <SettingsDrawer
         visible={drawerVisible}
         onClose={() => setDrawerVisible(false)}
       />
+      {/* */}
     </>
   );
 };
