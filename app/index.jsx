@@ -78,7 +78,7 @@ export default function Index() {
             ref={formRef}
             animation="fadeInLeft"
             easing="ease-in-out"
-            duration={100}
+            duration={200}
             key={isSignIn ? "signin" : "signup"}
           >
             {!isSignIn ? (
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   formContainer: {
-    margin: 15,
+    margin: 18,
     backgroundColor: "rgba(238, 230, 230, 0.67)",
     borderRadius: 40,
     borderWidth: 3,
@@ -177,10 +177,10 @@ const styles = StyleSheet.create({
   },
   header: {
     marginTop: 10,
-    fontSize: 51,
+    fontSize: 49,
     textAlign: "center",
     marginBottom: 10,
-    letterSpacing: 5,
+    letterSpacing: 3,
     fontWeight: 800,
     lineHeight: 50,
     backgroundColor: "red",
@@ -195,6 +195,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     fontWeight: 500,
     color: "#333",
+    lineHeight: 30,
   },
   divider: {
     flexDirection: "row",

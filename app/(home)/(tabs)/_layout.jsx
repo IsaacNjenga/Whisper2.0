@@ -57,7 +57,7 @@ const TabLayout = () => {
         },
       })}
     >
-      <Tabs.Screen name="index" options={{ title: "Chats" }} />
+      <Tabs.Screen name="index" options={{ title: "" }} />
       <Tabs.Screen
         name="profile"
         options={{
