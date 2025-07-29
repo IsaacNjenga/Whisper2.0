@@ -12,7 +12,7 @@ const theme = {
     ...DefaultTheme.colors,
     primary: "#f90404ff",
     secondary: "#ffffffff",
-    background: MD2Colors.red300,
+    background: MD2Colors.red500,
     onBackground: MD2Colors.white,
   },
 };

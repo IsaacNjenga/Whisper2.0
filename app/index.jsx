@@ -13,6 +13,7 @@ import { Button, TextInput, useTheme } from "react-native-paper";
 import bgImg from "@/assets/images/bg.jpeg";
 import Spinner from "react-native-loading-spinner-overlay";
 import * as Animatable from "react-native-animatable";
+import { useRouter } from "expo-router";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
@@ -25,6 +26,8 @@ export default function Index() {
   const [password, setPassword] = useState("");
   const [isSignIn, setIsSignIn] = useState(true);
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   const formRef = useRef(null);
 
@@ -43,8 +46,10 @@ export default function Index() {
       let authType;
       if (isSignIn) {
         console.log({ email: email, password: password });
+        router.replace("/(home)");
       } else {
         console.log({ username: username, email: email, password: password });
+        router.replace("/(home)");
       }
     } catch (error) {
       console.log("Error on auth:", error);
@@ -151,7 +156,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 0,
     justifyContent: "center",
-    backgroundColor: "whitesmoke",
+    backgroundColor: "#333",
     paddingHorizontal: WIDTH > HEIGHT ? "40%" : 0,
   },
   imageBackground: {
