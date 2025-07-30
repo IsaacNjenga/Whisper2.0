@@ -2,7 +2,7 @@ import bgImg from "@/assets/images/bg.jpeg";
 import { useAuth } from "@/providers/AuthProvider";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { BlurView } from "expo-blur";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import React, { useLayoutEffect, useState } from "react";
 import {
   ImageBackground,
@@ -11,11 +11,15 @@ import {
   View,
 } from "react-native";
 import { Avatar, Button, Dialog, Portal, Text } from "react-native-paper";
+import { ChannelList } from "stream-chat-expo";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [promptVisible, setPromptVisible] = useState(false);
   const { onLogout, authState } = useAuth();
+  const router = useRouter();
+
+  const userId = authState?.user_id;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -29,7 +33,11 @@ const HomeScreen = () => {
               }}
             />
           ) : (
-            <Avatar.Text size={40} label="JD" labelStyle={{ fontSize: 20 }} />
+            <Avatar.Text
+              size={40}
+              label={authState?.user_name[0].toUpperCase()}
+              labelStyle={{ fontSize: 20 }}
+            />
           )}
         </View>
       ),
@@ -52,7 +60,6 @@ const HomeScreen = () => {
       <ImageBackground source={bgImg} style={styles.image} resizeMode="cover">
         <BlurView intensity={90} tint="dark" style={StyleSheet.absoluteFill} />
         <View>
-          <Text variant="bodyMedium">HomeScreen</Text>
           <Portal>
             <Dialog
               visible={promptVisible}
@@ -96,6 +103,10 @@ const HomeScreen = () => {
               </Dialog.Actions>
             </Dialog>
           </Portal>
+          <ChannelList
+            filters={{ members: { $in: [userId] } }}
+            onSelect={(channel) => router.push(`/channel/${channel.cid}`)}
+          />
         </View>
       </ImageBackground>
     </View>

@@ -41,7 +41,7 @@ const TabLayout = () => {
         tabBarIcon: ({ focused }) => {
           const iconMap = {
             index: "chat-bubble",
-            explore: " account-group",
+            explore: "groups",
             profile: "person",
           };
           return (

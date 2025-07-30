@@ -1,6 +1,9 @@
+import bgImg from "@/assets/images/bg.jpeg";
+import UserListView from "@/components/UserListView";
 import { useAuth } from "@/providers/AuthProvider";
-import React, { useEffect } from "react";
-import { FlatList, ScrollView } from "react-native";
+import { BlurView } from "expo-blur";
+import React, { useEffect, useState } from "react";
+import { FlatList, ImageBackground, StyleSheet } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 
 const API_URL = process.env.EXPO_PUBLIC_SERVER_URL;
@@ -9,6 +12,8 @@ const ExploreScreen = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const { authState } = useAuth();
+
+  const userId = authState?.user_id;
 
   useEffect(() => {
     const fetchAllUsers = async () => {
@@ -27,9 +32,7 @@ const ExploreScreen = () => {
         }
         const data = await res.json();
 
-        const filteredUsers = data.users.filter(
-          (user) => user._id !== authState?.user._id
-        );
+        const filteredUsers = data.users.filter((user) => user._id !== userId);
 
         setUsers(filteredUsers);
       } catch (error) {
@@ -39,22 +42,39 @@ const ExploreScreen = () => {
       }
     };
     fetchAllUsers();
-  }, [authState?.user_id, authState.token]);
+  }, [userId, authState.token]);
 
   return (
-    <ScrollView>
-      <Spinner visible={loading} textContent={"Loading users..."} />
-      <FlatList
-        data={users}
-        contentContainerStyle={{ gap: 5 }}
-        renderItem={({ item }) => (
-          <View>
-            <Text>{item.name}</Text>
-          </View>
-        )}
-      />
-    </ScrollView>
+    <>
+      <ImageBackground source={bgImg} style={styles.image} resizeMode="cover">
+        <BlurView intensity={30} tint="light" style={StyleSheet.absoluteFill} />
+        <Spinner
+          visible={loading}
+          textContent={"Loading users..."}
+          textStyle={{ color: "white" }}
+        />
+        <FlatList
+          data={users}
+          contentContainerStyle={{
+            gap: 3,
+            backgroundColor: "rgba(220, 188, 188, 0)",
+          }}
+          renderItem={({ item }) => <UserListView item={item} />}
+        />
+      </ImageBackground>
+    </>
   );
 };
 
 export default ExploreScreen;
+
+const styles = StyleSheet.create({
+  image: {
+    width: "100%",
+    height: "100%",
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+    backdropFilter: "blur(4) brightness(1.2)",
+  },
+});
