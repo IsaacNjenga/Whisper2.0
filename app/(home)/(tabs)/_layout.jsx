@@ -1,14 +1,15 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
-import { Tabs } from "expo-router";
-import { Button, useTheme } from "react-native-paper";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { Tabs } from "expo-router";
+import React from "react";
+import { Text, TouchableOpacity } from "react-native";
+import { useTheme } from "react-native-paper";
 
 const TabLayout = () => {
   const theme = useTheme();
 
   const tabLabelMap = {
     index: "Chats",
+    explore: "Explore",
     profile: "Profile",
   };
 
@@ -40,6 +41,7 @@ const TabLayout = () => {
         tabBarIcon: ({ focused }) => {
           const iconMap = {
             index: "chat-bubble",
+            explore: " account-group",
             profile: "person",
           };
           return (
@@ -58,6 +60,7 @@ const TabLayout = () => {
       })}
     >
       <Tabs.Screen name="index" options={{ title: "" }} />
+      <Tabs.Screen name="explore" options={{ title: "Explore" }} />
       <Tabs.Screen
         name="profile"
         options={{

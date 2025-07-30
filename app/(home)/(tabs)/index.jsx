@@ -21,12 +21,16 @@ const HomeScreen = () => {
     navigation.setOptions({
       headerLeft: () => (
         <View style={{ margin: 10 }}>
-          <Avatar.Image
-            size={40}
-            source={{
-              uri: authState?.user_avatar || "https://i.pravatar.cc/150?img=3",
-            }}
-          />
+          {authState.user_avatar ? (
+            <Avatar.Image
+              size={40}
+              source={{
+                uri: authState?.user_avatar,
+              }}
+            />
+          ) : (
+            <Avatar.Text size={40} label="JD" labelStyle={{ fontSize: 20 }} />
+          )}
         </View>
       ),
       headerRight: () => (

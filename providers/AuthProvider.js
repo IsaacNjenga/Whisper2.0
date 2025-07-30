@@ -1,4 +1,5 @@
 import { client } from "@/app/_layout";
+import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -17,6 +18,7 @@ export const AuthProvider = ({ children }) => {
     user_id: null,
   });
   const [initialized, setInitialized] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const loadToken = async () => {
@@ -114,6 +116,7 @@ export const AuthProvider = ({ children }) => {
       createdAt: null,
     });
     setInitialized(false);
+    router.push("/");
   };
 
   const value = {

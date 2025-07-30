@@ -1,4 +1,5 @@
 import bgImg from "@/assets/images/bg.jpeg";
+import AvatarUpload from "@/components/AvatarUpload";
 import EditProfile from "@/components/EditProfile";
 import SettingsDrawer from "@/components/SettingsDrawer";
 import { useAuth } from "@/providers/AuthProvider";
@@ -52,27 +53,31 @@ const ProfileScreen = () => {
               style={StyleSheet.absoluteFill}
             />
             <View style={styles.avatar}>
-              <Avatar.Image
-                size={150}
-                source={{
-                  uri:
-                    authState?.user_avatar || "https://i.pravatar.cc/150?img=3",
-                }}
-              />
+              {authState.user_avatar ? (
+                <Avatar.Image
+                  size={150}
+                  source={{
+                    uri: authState?.user_avatar,
+                  }}
+                />
+              ) : (
+                <Avatar.Text
+                  size={150}
+                  label="JD"
+                  labelStyle={{
+                    fontSize: 40,
+                    fontWeight: "bold",
+                    letterSpacing: 2,
+                    lineHeight: 50,
+                  }}
+                />
+              )}
 
               <Text style={{ fontWeight: "bold", marginTop: 10, fontSize: 20 }}>
                 @John Doe
               </Text>
 
-              <Button
-                mode="contained-tonal"
-                style={{ marginTop: 10 }}
-                icon={"camera"}
-              >
-                <Text style={{ fontSize: 15, color: "#fff" }}>
-                  Change Image
-                </Text>
-              </Button>
+              <AvatarUpload id={authState?.user_id} />
             </View>
             <View style={styles.formContainer}>
               <View style={styles.innerContainer}>
