@@ -15,7 +15,7 @@ import { Avatar, Button, Dialog, Portal, Text } from "react-native-paper";
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [promptVisible, setPromptVisible] = useState(false);
-  const { onLogout } = useAuth();
+  const { onLogout, authState } = useAuth();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -24,7 +24,7 @@ const HomeScreen = () => {
           <Avatar.Image
             size={40}
             source={{
-              uri: "https://pbs.twimg.com/media/Gw9vvoYbUAAty5q?format=jpg&name=360x360",
+              uri: authState?.user_avatar || "https://i.pravatar.cc/150?img=3",
             }}
           />
         </View>

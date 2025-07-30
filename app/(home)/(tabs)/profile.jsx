@@ -1,23 +1,25 @@
-import {
-  View,
-  Text,
-  ImageBackground,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
-import React, { useLayoutEffect, useState } from "react";
 import bgImg from "@/assets/images/bg.jpeg";
-import { BlurView } from "expo-blur";
-import { Avatar, Button, useTheme } from "react-native-paper";
-import SettingsDrawer from "@/components/SettingsDrawer";
-import { useNavigation } from "expo-router";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import EditProfile from "@/components/EditProfile";
+import SettingsDrawer from "@/components/SettingsDrawer";
+import { useAuth } from "@/providers/AuthProvider";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { BlurView } from "expo-blur";
+import { useNavigation } from "expo-router";
+import React, { useLayoutEffect, useState } from "react";
+import {
+  ImageBackground,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Avatar, Button, useTheme } from "react-native-paper";
 
 const ProfileScreen = () => {
   const { colors } = useTheme();
   const navigation = useNavigation();
+  const { authState } = useAuth();
 
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
@@ -53,11 +55,12 @@ const ProfileScreen = () => {
               <Avatar.Image
                 size={150}
                 source={{
-                  uri: "https://pbs.twimg.com/media/Gw9vvoYbUAAty5q?format=jpg&name=360x360",
+                  uri:
+                    authState?.user_avatar || "https://i.pravatar.cc/150?img=3",
                 }}
               />
 
-              <Text style={{ fontWeight: "bold", marginTop: 10 }}>
+              <Text style={{ fontWeight: "bold", marginTop: 10, fontSize: 20 }}>
                 @John Doe
               </Text>
 
