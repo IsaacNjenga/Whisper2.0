@@ -38,33 +38,8 @@ const HomeScreen = () => {
       headerRight: () => (
         <View style={{ margin: 10 }}>
           <TouchableOpacity onPress={onLogout}>
-            <Tooltip title="Log out">
-              <MaterialIcons name="logout" size={24} color="white" />
-            </Tooltip>
+            <MaterialIcons name="logout" size={24} color="white" />
           </TouchableOpacity>
-          <Portal>
-            <Dialog
-              visible={promptVisible}
-              onDismiss={() => {
-                setPromptVisible(false);
-              }}
-            >
-              {" "}
-              <Dialog.Title>Alert</Dialog.Title>
-              <Dialog.Content>
-                <Text variant="bodyMedium">This is simple dialog</Text>
-              </Dialog.Content>
-              <Dialog.Actions>
-                <Button
-                  onPress={() => {
-                    setPromptVisible(false);
-                  }}
-                >
-                  Done
-                </Button>
-              </Dialog.Actions>
-            </Dialog>
-          </Portal>
         </View>
       ),
     });
@@ -78,9 +53,51 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <ImageBackground source={bgImg} style={styles.image} resizeMode="cover">
-        <BlurView intensity={90} tint="light" style={StyleSheet.absoluteFill} />
+        <BlurView intensity={90} tint="dark" style={StyleSheet.absoluteFill} />
         <View>
-          <Text>HomeScreen</Text>
+          <Text variant="bodyMedium">HomeScreen</Text>
+          <Portal>
+  <Dialog
+    visible={promptVisible}
+    onDismiss={() => setPromptVisible(false)}
+    style={{
+      backgroundColor: "#1e1e1e",
+      borderRadius: 12,
+      paddingBottom: 10,
+      elevation: 5,
+    }}
+  >
+    <Dialog.Title style={{ color: "white" }}>Log out?</Dialog.Title>
+    <Dialog.Content>
+      <Text
+        variant="bodyMedium"
+        style={{ color: "#ccc", fontSize: 15, marginBottom: 10 }}
+      >
+        Are you sure you want to log out of your account?
+      </Text>
+    </Dialog.Content>
+    <Dialog.Actions style={{ justifyContent: "flex-end", paddingRight: 10 }}>
+      <Button
+        textColor="#f44336"
+        onPress={() => {
+          setPromptVisible(false);
+          // add actual logout function here
+        }}
+      >
+        Yes
+      </Button>
+      <Button
+        textColor="#ccc"
+        onPress={() => {
+          setPromptVisible(false);
+        }}
+      >
+        Cancel
+      </Button>
+    </Dialog.Actions>
+  </Dialog>
+</Portal>
+
         </View>
       </ImageBackground>
     </View>

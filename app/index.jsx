@@ -1,4 +1,7 @@
-import { useState, useRef } from "react";
+import bgImg from "@/assets/images/bg.jpeg";
+import { useAuth } from "@/providers/AuthProvider";
+import { useRouter } from "expo-router";
+import { useRef, useState } from "react";
 import {
   Alert,
   Dimensions,
@@ -9,11 +12,9 @@ import {
   Text,
   View,
 } from "react-native";
-import { Button, TextInput, useTheme } from "react-native-paper";
-import bgImg from "@/assets/images/bg.jpeg";
-import Spinner from "react-native-loading-spinner-overlay";
 import * as Animatable from "react-native-animatable";
-import { useRouter } from "expo-router";
+import Spinner from "react-native-loading-spinner-overlay";
+import { Button, TextInput, useTheme } from "react-native-paper";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
@@ -26,6 +27,7 @@ export default function Index() {
   const [password, setPassword] = useState("");
   const [isSignIn, setIsSignIn] = useState(true);
   const [loading, setLoading] = useState(false);
+  const { onLogin, onRegister } = useAuth();
 
   const router = useRouter();
 
@@ -40,16 +42,12 @@ export default function Index() {
   };
 
   const onAuth = async () => {
-    //TODO: link to backend routes
     setLoading(true);
     try {
-      let authType;
       if (isSignIn) {
-        console.log({ email: email, password: password });
-        router.replace("/(home)");
+        await onLogin(email, password);
       } else {
-        console.log({ username: username, email: email, password: password });
-        router.replace("/(home)");
+        await onRegister(username, email, password);
       }
     } catch (error) {
       console.log("Error on auth:", error);
