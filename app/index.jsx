@@ -1,6 +1,5 @@
 import bgImg from "@/assets/images/bg.jpeg";
 import { useAuth } from "@/providers/AuthProvider";
-import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import {
   Alert,
@@ -14,7 +13,7 @@ import {
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 import Spinner from "react-native-loading-spinner-overlay";
-import { Button, TextInput, useTheme } from "react-native-paper";
+import { Button, HelperText, TextInput, useTheme } from "react-native-paper";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
@@ -27,9 +26,16 @@ export default function Index() {
   const [password, setPassword] = useState("");
   const [isSignIn, setIsSignIn] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
   const { onLogin, onRegister } = useAuth();
 
-  const router = useRouter();
+  const pswdError = () => {
+    return password && password.length < 12;
+  };
+
+  const authError = () => {
+    return errors?.password || errors?.email || errors?.username;
+  };
 
   const formRef = useRef(null);
 
@@ -45,9 +51,15 @@ export default function Index() {
     setLoading(true);
     try {
       if (isSignIn) {
-        await onLogin(email, password);
+        const result = await onLogin(email, password);
+        if (result.success === false) {
+          setErrors(result.message || {});
+        }
       } else {
-        await onRegister(username, email, password);
+        const result = await onRegister(username, email, password);
+        if (result.success === false) {
+          setErrors(result.message || {});
+        }
       }
     } catch (error) {
       console.log("Error on auth:", error);
@@ -92,6 +104,13 @@ export default function Index() {
                   left={<TextInput.Icon icon="account" />}
                   textColor={theme.colors.primary}
                 />
+                <HelperText
+                  type="error"
+                  visible={!!errors.username}
+                  style={{ color: "#333", fontSize: 15 }}
+                >
+                  {errors.username || "Username is required"}
+                </HelperText>
               </View>
             ) : null}
           </Animatable.View>
@@ -108,6 +127,13 @@ export default function Index() {
               left={<TextInput.Icon icon="email" />}
               textColor={theme.colors.primary}
             />
+            <HelperText
+              type="error"
+              visible={!!errors.email}
+              style={{ color: "#333", fontSize: 15 }}
+            >
+              {errors.email || "Email is required"}
+            </HelperText>
           </View>
 
           <View style={styles.formView}>
@@ -123,6 +149,13 @@ export default function Index() {
               left={<TextInput.Icon icon="lock" />}
               textColor={theme.colors.primary}
             />
+            <HelperText
+              type="error"
+              visible={pswdError()}
+              style={{ color: "#333", fontSize: 15 }}
+            >
+              Password must be at least 12 characters long.
+            </HelperText>
           </View>
 
           <View>

@@ -1,27 +1,21 @@
-import {
-  View,
-  ImageBackground,
-  StyleSheet,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
-import React, { useLayoutEffect, useState } from "react";
 import bgImg from "@/assets/images/bg.jpeg";
+import { useAuth } from "@/providers/AuthProvider";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { BlurView } from "expo-blur";
 import { useNavigation } from "expo-router";
+import React, { useLayoutEffect, useState } from "react";
 import {
-  Avatar,
-  Dialog,
-  Portal,
-  Tooltip,
-  Text,
-  Button,
-} from "react-native-paper";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Avatar, Button, Dialog, Portal, Text } from "react-native-paper";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [promptVisible, setPromptVisible] = useState(false);
+  const { onLogout } = useAuth();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -37,7 +31,7 @@ const HomeScreen = () => {
       ),
       headerRight: () => (
         <View style={{ margin: 10 }}>
-          <TouchableOpacity onPress={onLogout}>
+          <TouchableOpacity onPress={logout}>
             <MaterialIcons name="logout" size={24} color="white" />
           </TouchableOpacity>
         </View>
@@ -45,8 +39,7 @@ const HomeScreen = () => {
     });
   }, []);
 
-  const onLogout = () => {
-    console.log("clicked");
+  const logout = () => {
     setPromptVisible(true);
   };
 
@@ -57,47 +50,48 @@ const HomeScreen = () => {
         <View>
           <Text variant="bodyMedium">HomeScreen</Text>
           <Portal>
-  <Dialog
-    visible={promptVisible}
-    onDismiss={() => setPromptVisible(false)}
-    style={{
-      backgroundColor: "#1e1e1e",
-      borderRadius: 12,
-      paddingBottom: 10,
-      elevation: 5,
-    }}
-  >
-    <Dialog.Title style={{ color: "white" }}>Log out?</Dialog.Title>
-    <Dialog.Content>
-      <Text
-        variant="bodyMedium"
-        style={{ color: "#ccc", fontSize: 15, marginBottom: 10 }}
-      >
-        Are you sure you want to log out of your account?
-      </Text>
-    </Dialog.Content>
-    <Dialog.Actions style={{ justifyContent: "flex-end", paddingRight: 10 }}>
-      <Button
-        textColor="#f44336"
-        onPress={() => {
-          setPromptVisible(false);
-          // add actual logout function here
-        }}
-      >
-        Yes
-      </Button>
-      <Button
-        textColor="#ccc"
-        onPress={() => {
-          setPromptVisible(false);
-        }}
-      >
-        Cancel
-      </Button>
-    </Dialog.Actions>
-  </Dialog>
-</Portal>
-
+            <Dialog
+              visible={promptVisible}
+              onDismiss={() => setPromptVisible(false)}
+              style={{
+                backgroundColor: "#1e1e1e",
+                borderRadius: 12,
+                paddingBottom: 10,
+                elevation: 5,
+              }}
+            >
+              <Dialog.Title style={{ color: "white" }}>Log out?</Dialog.Title>
+              <Dialog.Content>
+                <Text
+                  variant="bodyMedium"
+                  style={{ color: "#ccc", fontSize: 15, marginBottom: 10 }}
+                >
+                  Are you sure you want to log out of your account?
+                </Text>
+              </Dialog.Content>
+              <Dialog.Actions
+                style={{ justifyContent: "flex-end", paddingRight: 10 }}
+              >
+                <Button
+                  textColor="#f44336"
+                  onPress={() => {
+                    setPromptVisible(false);
+                    onLogout();
+                  }}
+                >
+                  Yes
+                </Button>
+                <Button
+                  textColor="#ccc"
+                  onPress={() => {
+                    setPromptVisible(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
         </View>
       </ImageBackground>
     </View>

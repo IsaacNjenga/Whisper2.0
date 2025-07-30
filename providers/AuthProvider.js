@@ -41,7 +41,6 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const register = async (username, email, password) => {
-    console.log("Registering user:", { username, email, password });
     try {
       const result = await fetch(`${API_URL}/api/sign-up`, {
         method: "POST",
@@ -50,7 +49,6 @@ export const AuthProvider = ({ children }) => {
       });
       const json = await result.json();
 
-      console.log("Registration response:", json);
       setAuthState({
         token: json.stream_token,
         authenticated: true,
@@ -94,7 +92,7 @@ export const AuthProvider = ({ children }) => {
       await SecureStore.setItemAsync(TOKEN_KEY, JSON.stringify(json));
       return result;
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Login error:", error.message);
       return {
         success: false,
         message: error.message || "Login failed",
@@ -104,6 +102,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     await SecureStore.deleteItemAsync(TOKEN_KEY);
+    console.log("User logged out");
     await client.disconnectUser();
     setAuthState({
       token: null,
