@@ -1,4 +1,5 @@
 import bgImg from "@/assets/images/bg.jpeg";
+import SettingsDrawer from "@/components/SettingsDrawer";
 import { useAuthStore } from "@/providers/AuthStore";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { BlurView } from "expo-blur";
@@ -16,6 +17,7 @@ import { ChannelList } from "stream-chat-expo";
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [promptVisible, setPromptVisible] = useState(false);
+  const [drawerVisible, setDrawerVisible] = useState(false);
   const { logout, user } = useAuthStore();
   const router = useRouter();
 
@@ -26,18 +28,22 @@ const HomeScreen = () => {
       headerLeft: () => (
         <View style={{ margin: 10 }}>
           {user?.avatar ? (
-            <Avatar.Image
-              size={40}
-              source={{
-                uri: user?.avatar,
-              }}
-            />
+            <TouchableOpacity onPress={() => setDrawerVisible(true)}>
+              <Avatar.Image
+                size={40}
+                source={{
+                  uri: user?.avatar,
+                }}
+              />
+            </TouchableOpacity>
           ) : (
-            <Avatar.Text
-              size={40}
-              label={user?.username[0].toUpperCase()}
-              labelStyle={{ fontSize: 20 }}
-            />
+            <TouchableOpacity onPress={() => setDrawerVisible(true)}>
+              <Avatar.Text
+                size={40}
+                label={user?.username[0].toUpperCase()}
+                labelStyle={{ fontSize: 20 }}
+              />
+            </TouchableOpacity>
           )}
         </View>
       ),
@@ -110,6 +116,12 @@ const HomeScreen = () => {
           />
         </View>
       </ImageBackground>
+
+      <SettingsDrawer
+        visible={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+        slideSide="Left"
+      />
     </View>
   );
 };

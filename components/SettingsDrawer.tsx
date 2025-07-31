@@ -1,21 +1,29 @@
 // components/SettingsDrawer.tsx
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
+
+type SlideSide = "Left" | "Right" | "Up" | "Down";
 
 type Props = {
   visible: boolean;
   onClose: () => void;
   onLogout: () => void;
+  slideSide: SlideSide;
 };
 
-const SettingsDrawer: React.FC<Props> = ({ visible, onClose, onLogout }) => {
+const SettingsDrawer: React.FC<Props> = ({
+  visible,
+  onClose,
+  onLogout,
+  slideSide,
+}) => {
   return (
     <Modal
       isVisible={visible}
       onBackdropPress={onClose}
-      animationIn="slideInRight"
-      animationOut="slideOutRight"
+      animationIn={`slideIn${slideSide}`}
+      animationOut={`slideOut${slideSide}`}
       style={styles.modal}
     >
       <View style={styles.drawer}>
@@ -38,8 +46,8 @@ export default SettingsDrawer;
 const styles = StyleSheet.create({
   modal: {
     margin: 0,
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
   },
   drawer: {
     width: "75%",

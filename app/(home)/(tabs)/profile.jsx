@@ -120,6 +120,7 @@ const ProfileScreen = () => {
       <SettingsDrawer
         visible={drawerVisible}
         onClose={() => setDrawerVisible(false)}
+        slideSide="Right"
       />
     </>
   );
