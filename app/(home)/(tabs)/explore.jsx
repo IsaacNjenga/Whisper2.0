@@ -1,6 +1,6 @@
 import bgImg from "@/assets/images/bg.jpeg";
 import UserListView from "@/components/UserListView";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuthStore } from "@/providers/AuthStore";
 import { BlurView } from "expo-blur";
 import React, { useEffect, useState } from "react";
 import { FlatList, ImageBackground, StyleSheet } from "react-native";
@@ -11,14 +11,14 @@ const API_URL = process.env.EXPO_PUBLIC_SERVER_URL;
 const ExploreScreen = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { authState } = useAuth();
+  const { user, token } = useAuthStore();
 
-  const userId = authState?.user_id;
+  const userId = user?.id;
 
   useEffect(() => {
     const fetchAllUsers = async () => {
       setLoading(true);
-      if (authState.token === null) return;
+      if (token === null) return;
       try {
         const res = await fetch(`${API_URL}/api/fetch-users`, {
           method: "GET",
@@ -42,7 +42,7 @@ const ExploreScreen = () => {
       }
     };
     fetchAllUsers();
-  }, [userId, authState.token]);
+  }, [userId, token]);
 
   return (
     <>

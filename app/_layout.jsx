@@ -1,6 +1,6 @@
-import { AuthProvider, useAuth } from "@/providers/AuthProvider";
+import { useAuthStore } from "@/providers/AuthStore";
 import { Slot, useRouter, useSegments } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { PermissionsAndroid, Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {
@@ -10,7 +10,6 @@ import {
 } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StreamChat } from "stream-chat";
-import { Chat, OverlayProvider } from "stream-chat-expo";
 
 const STREAM_KEY = process.env.EXPO_PUBLIC_STREAM_ACCESS_KEY;
 export const client = StreamChat.getInstance(STREAM_KEY);
@@ -26,56 +25,12 @@ const theme = {
   },
 };
 
-const InitialLayout = ({ children }) => {
-  const { authState, initialized } = useAuth();
+export default function RootLayout() {
+  const { checkAuth, user, token } = useAuthStore();
+  const [authChecked, setAuthChecked] = useState(false);
   const segments = useSegments();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!initialized) return;
-
-    const inAuthGroup = segments[0] === "(home)";
-
-    if (!authState?.authenticated && inAuthGroup) {
-      console.log("Not authenticated, navigating to auth");
-      router.replace("/");
-      return;
-    }
-
-    if (authState?.authenticated && !inAuthGroup) {
-      console.log("Authenticated, navigating to home");
-      router.replace("/(home)");
-    }
-
-    if (authState?.authenticated && authState?.token) {
-      (async () => {
-        if (!client.userID) {
-          try {
-            await client.connectUser(
-              {
-                id: authState.user_id,
-                name: authState.user_name,
-                image: authState.user_avatar,
-              },
-              authState.token
-            );
-            console.log("Stream user connected");
-          } catch (error) {
-            console.error("Stream connection failed:", error);
-          }
-        }
-      })();
-    }
-  }, [initialized, authState, segments]);
-
-  return (
-    <OverlayProvider>
-      <Chat client={client}>{children}</Chat>
-    </OverlayProvider>
-  );
-};
-
-export default function RootLayout() {
   useEffect(() => {
     const run = async () => {
       if (Platform.OS === "android") {
@@ -88,17 +43,34 @@ export default function RootLayout() {
     run();
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      await checkAuth();
+      setAuthChecked(true);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!authChecked || segments.length === 0) return;
+    const inAuthScreen = segments[0] === "(auth)";
+    const isSignedIn = user && token;
+
+    if (!isSignedIn && !inAuthScreen) {
+      router.replace("/(auth)");
+    } else if (isSignedIn && inAuthScreen) {
+      router.replace("/(home)");
+    }
+  }, [user, token, authChecked]);
+
+  if (!authChecked) return null;
+
   return (
-    <AuthProvider>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <PaperProvider theme={theme}>
-          <SafeAreaProvider>
-            <InitialLayout>
-              <Slot />
-            </InitialLayout>
-          </SafeAreaProvider>
-        </PaperProvider>
-      </GestureHandlerRootView>
-    </AuthProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <PaperProvider theme={theme}>
+        <SafeAreaProvider>
+          <Slot />
+        </SafeAreaProvider>
+      </PaperProvider>
+    </GestureHandlerRootView>
   );
 }

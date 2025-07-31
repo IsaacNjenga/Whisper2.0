@@ -2,7 +2,7 @@ import bgImg from "@/assets/images/bg.jpeg";
 import AvatarUpload from "@/components/AvatarUpload";
 import EditProfile from "@/components/EditProfile";
 import SettingsDrawer from "@/components/SettingsDrawer";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuthStore } from "@/providers/AuthStore";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { BlurView } from "expo-blur";
 import { useNavigation } from "expo-router";
@@ -15,12 +15,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Avatar, Button, useTheme } from "react-native-paper";
+import { Avatar, Button } from "react-native-paper";
 
 const ProfileScreen = () => {
-  const { colors } = useTheme();
   const navigation = useNavigation();
-  const { authState } = useAuth();
+  const { user } = useAuthStore();
 
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
@@ -53,11 +52,11 @@ const ProfileScreen = () => {
               style={StyleSheet.absoluteFill}
             />
             <View style={styles.avatar}>
-              {authState.user_avatar ? (
+              {user?.avatar ? (
                 <Avatar.Image
                   size={150}
                   source={{
-                    uri: authState?.user_avatar,
+                    uri: user?.avatar,
                   }}
                 />
               ) : (
@@ -77,7 +76,7 @@ const ProfileScreen = () => {
                 @John Doe
               </Text>
 
-              <AvatarUpload id={authState?.user_id} />
+              <AvatarUpload id={user?.id} />
             </View>
             <View style={styles.formContainer}>
               <View style={styles.innerContainer}>
@@ -122,7 +121,6 @@ const ProfileScreen = () => {
         visible={drawerVisible}
         onClose={() => setDrawerVisible(false)}
       />
-      {/* */}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuthStore } from "@/providers/AuthStore";
 import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -9,10 +9,10 @@ const UserListView = ({ item }) => {
   const { client } = useChatContext();
   const router = useRouter();
 
-  const { authState } = useAuth();
+  const { user } = useAuthStore();
 
   const onPress = async () => {
-    const members = [authState?.user_id, item._id].sort();
+    const members = [user?.id, item._id].sort();
 
     const channel = client.channel("messaging", {
       members,

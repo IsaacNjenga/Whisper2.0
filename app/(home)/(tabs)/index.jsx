@@ -1,5 +1,5 @@
 import bgImg from "@/assets/images/bg.jpeg";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuthStore } from "@/providers/AuthStore";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { BlurView } from "expo-blur";
 import { useNavigation, useRouter } from "expo-router";
@@ -16,26 +16,26 @@ import { ChannelList } from "stream-chat-expo";
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [promptVisible, setPromptVisible] = useState(false);
-  const { onLogout, authState } = useAuth();
+  const { logout, user } = useAuthStore();
   const router = useRouter();
 
-  const userId = authState?.user_id;
+  const userId = user?.id;
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
         <View style={{ margin: 10 }}>
-          {authState.user_avatar ? (
+          {user?.avatar ? (
             <Avatar.Image
               size={40}
               source={{
-                uri: authState?.user_avatar,
+                uri: user?.avatar,
               }}
             />
           ) : (
             <Avatar.Text
               size={40}
-              label={authState?.user_name[0].toUpperCase()}
+              label={user?.username[0].toUpperCase()}
               labelStyle={{ fontSize: 20 }}
             />
           )}
@@ -43,7 +43,7 @@ const HomeScreen = () => {
       ),
       headerRight: () => (
         <View style={{ margin: 10 }}>
-          <TouchableOpacity onPress={logout}>
+          <TouchableOpacity onPress={logoutPrompt}>
             <MaterialIcons name="logout" size={24} color="white" />
           </TouchableOpacity>
         </View>
@@ -51,7 +51,7 @@ const HomeScreen = () => {
     });
   }, []);
 
-  const logout = () => {
+  const logoutPrompt = () => {
     setPromptVisible(true);
   };
 
@@ -85,9 +85,10 @@ const HomeScreen = () => {
               >
                 <Button
                   textColor="#f44336"
-                  onPress={() => {
+                  onPress={async () => {
                     setPromptVisible(false);
-                    onLogout();
+                    await logout();
+                    router.replace("/(auth)");
                   }}
                 >
                   Yes
@@ -104,7 +105,7 @@ const HomeScreen = () => {
             </Dialog>
           </Portal>
           <ChannelList
-            filters={{ members: { $in: [userId] } }}
+            filters={{ type: "messaging", members: { $in: [userId] } }}
             onSelect={(channel) => router.push(`/channel/${channel.cid}`)}
           />
         </View>
