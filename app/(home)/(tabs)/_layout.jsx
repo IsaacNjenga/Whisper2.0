@@ -1,7 +1,7 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Tabs } from "expo-router";
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { Text } from "react-native";
 import { useTheme } from "react-native-paper";
 
 const TabLayout = () => {
@@ -10,7 +10,7 @@ const TabLayout = () => {
   const tabLabelMap = {
     index: "Chats",
     explore: "Explore",
-    profile: "Profile",
+    //    profile: "Profile",
   };
 
   return (
@@ -42,7 +42,7 @@ const TabLayout = () => {
           const iconMap = {
             index: "chat-bubble",
             explore: "groups",
-            profile: "person",
+            //profile: "person",
           };
           return (
             <MaterialIcons
@@ -61,17 +61,20 @@ const TabLayout = () => {
     >
       <Tabs.Screen name="index" options={{ title: "" }} />
       <Tabs.Screen name="explore" options={{ title: "Explore" }} />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="profile"
         options={{
           title: "Profile",
-          headerRight: () => (
-            <TouchableOpacity style={{ padding: 10 }}>
-              <MaterialIcons name="settings" size={30} color={"white"} />
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => router.replace("/")}
+              style={{ marginLeft: 10 }}
+            >
+              <MaterialIcons name="chevron-left" size={25} />
             </TouchableOpacity>
           ),
         }}
-      />
+      /> */}
     </Tabs>
   );
 };

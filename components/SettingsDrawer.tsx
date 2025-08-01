@@ -1,4 +1,6 @@
 // components/SettingsDrawer.tsx
+import { useAuthStore } from "@/providers/AuthStore";
+import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
@@ -8,16 +10,13 @@ type SlideSide = "Left" | "Right" | "Up" | "Down";
 type Props = {
   visible: boolean;
   onClose: () => void;
-  onLogout: () => void;
   slideSide: SlideSide;
 };
 
-const SettingsDrawer: React.FC<Props> = ({
-  visible,
-  onClose,
-  onLogout,
-  slideSide,
-}) => {
+const SettingsDrawer: React.FC<Props> = ({ visible, onClose, slideSide }) => {
+  const { logout } = useAuthStore();
+  const router = useRouter();
+
   return (
     <Modal
       isVisible={visible}
@@ -29,12 +28,27 @@ const SettingsDrawer: React.FC<Props> = ({
       <View style={styles.drawer}>
         <Text style={styles.title}>Settings</Text>
 
-        <TouchableOpacity onPress={onLogout} style={styles.option}>
+        <TouchableOpacity
+          style={styles.option}
+          onPress={() => {
+            router.replace("/(home)/(profile)/profile" as any);
+          }}
+        >
+          <Text style={styles.optionText}>My Profile</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            logout();
+            router.replace("/(auth)");
+          }}
+          style={styles.option}
+        >
           <Text style={styles.optionText}>Log Out</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={onClose} style={styles.option}>
-          <Text style={styles.optionText}>Cancel</Text>
+          <Text style={styles.optionText}>Close</Text>
         </TouchableOpacity>
       </View>
     </Modal>

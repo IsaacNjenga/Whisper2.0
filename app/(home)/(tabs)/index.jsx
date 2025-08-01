@@ -1,24 +1,18 @@
-import bgImg from "@/assets/images/bg.jpeg";
+import LogoutPortal from "@/components/LogoutPortal";
 import SettingsDrawer from "@/components/SettingsDrawer";
 import { useAuthStore } from "@/providers/AuthStore";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { BlurView } from "expo-blur";
 import { useNavigation, useRouter } from "expo-router";
 import React, { useLayoutEffect, useState } from "react";
-import {
-  ImageBackground,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Avatar, Button, Dialog, Portal, Text } from "react-native-paper";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Avatar } from "react-native-paper";
 import { ChannelList } from "stream-chat-expo";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [promptVisible, setPromptVisible] = useState(false);
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const { logout, user } = useAuthStore();
+  const { user } = useAuthStore();
   const router = useRouter();
 
   const userId = user?.id;
@@ -63,64 +57,20 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <ImageBackground source={bgImg} style={styles.image} resizeMode="cover">
-        <BlurView intensity={90} tint="dark" style={StyleSheet.absoluteFill} />
-        <View>
-          <Portal>
-            <Dialog
-              visible={promptVisible}
-              onDismiss={() => setPromptVisible(false)}
-              style={{
-                backgroundColor: "#1e1e1e",
-                borderRadius: 12,
-                paddingBottom: 10,
-                elevation: 5,
-              }}
-            >
-              <Dialog.Title style={{ color: "white" }}>Log out?</Dialog.Title>
-              <Dialog.Content>
-                <Text
-                  variant="bodyMedium"
-                  style={{ color: "#ccc", fontSize: 15, marginBottom: 10 }}
-                >
-                  Are you sure you want to log out of your account?
-                </Text>
-              </Dialog.Content>
-              <Dialog.Actions
-                style={{ justifyContent: "flex-end", paddingRight: 10 }}
-              >
-                <Button
-                  textColor="#f44336"
-                  onPress={async () => {
-                    setPromptVisible(false);
-                    await logout();
-                    router.replace("/(auth)");
-                  }}
-                >
-                  Yes
-                </Button>
-                <Button
-                  textColor="#ccc"
-                  onPress={() => {
-                    setPromptVisible(false);
-                  }}
-                >
-                  Cancel
-                </Button>
-              </Dialog.Actions>
-            </Dialog>
-          </Portal>
-          <ChannelList
-            filters={{ type: "messaging", members: { $in: [userId] } }}
-            onSelect={(channel) => router.push(`/channel/${channel.cid}`)}
-          />
-        </View>
-      </ImageBackground>
+      <ChannelList
+        filters={{ type: "messaging", members: { $in: [userId] } }}
+        onSelect={(channel) => router.push(`/channel/${channel.cid}`)}
+      />
 
       <SettingsDrawer
         visible={drawerVisible}
         onClose={() => setDrawerVisible(false)}
         slideSide="Left"
+      />
+
+      <LogoutPortal
+        setPromptVisible={setPromptVisible}
+        promptVisible={promptVisible}
       />
     </View>
   );

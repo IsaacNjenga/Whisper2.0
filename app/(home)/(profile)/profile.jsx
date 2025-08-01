@@ -1,11 +1,10 @@
 import bgImg from "@/assets/images/bg.jpeg";
 import AvatarUpload from "@/components/AvatarUpload";
 import EditProfile from "@/components/EditProfile";
-import SettingsDrawer from "@/components/SettingsDrawer";
 import { useAuthStore } from "@/providers/AuthStore";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { BlurView } from "expo-blur";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import React, { useLayoutEffect, useState } from "react";
 import {
   ImageBackground,
@@ -20,18 +19,18 @@ import { Avatar, Button } from "react-native-paper";
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const { user } = useAuthStore();
+  const router = useRouter();
 
-  const [drawerVisible, setDrawerVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
+    navigation.setOptions({headerTitle:'My Profile',
+      headerLeft: () => (
         <TouchableOpacity
-          onPress={() => setDrawerVisible(true)}
-          style={{ paddingRight: 10 }}
+          onPress={() => router.replace("/")}
+          style={{ marginLeft: 10 }}
         >
-          <MaterialIcons name="settings" size={28} color="white" />
+          <MaterialIcons name="chevron-left" size={25} color={'white'}/>
         </TouchableOpacity>
       ),
     });
@@ -81,17 +80,17 @@ const ProfileScreen = () => {
             <View style={styles.formContainer}>
               <View style={styles.innerContainer}>
                 <View style={styles.details}>
-                  <Text style={styles.label}>Username:</Text>{" "}
+                  <Text style={styles.label}>Username:</Text>
                   <Text style={styles.value}>John Doe</Text>
                 </View>
 
                 <View style={styles.details}>
-                  <Text style={styles.label}>Email:</Text>{" "}
+                  <Text style={styles.label}>Email:</Text>
                   <Text style={styles.value}>John@email.com</Text>
                 </View>
 
                 <View style={styles.details}>
-                  <Text style={styles.label}>Secondary email:</Text>{" "}
+                  <Text style={styles.label}>Secondary email:</Text>
                   <Text style={styles.value}>John.Doe@email.com</Text>
                 </View>
               </View>
@@ -115,12 +114,6 @@ const ProfileScreen = () => {
       <EditProfile
         visible={editVisible}
         onClose={() => setEditVisible(false)}
-      />
-
-      <SettingsDrawer
-        visible={drawerVisible}
-        onClose={() => setDrawerVisible(false)}
-        slideSide="Right"
       />
     </>
   );

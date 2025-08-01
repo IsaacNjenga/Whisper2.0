@@ -1,15 +1,19 @@
+import UserHeader from "@/components/UserHeader";
+import { useAuthStore } from "@/providers/AuthStore";
 import { useHeaderHeight } from "@react-navigation/elements";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
+  Text,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
+import { Avatar } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Channel,
@@ -17,6 +21,44 @@ import {
   MessageList,
   useChatContext,
 } from "stream-chat-expo";
+
+// const UserHeader = ({ channel }) => {
+//   const navigation = useNavigation();
+//   const { user } = useAuthStore();
+
+//   useEffect(() => {
+//     if (channel && channel.state && channel.state.members) {
+//       const members = Object.values(channel?.state?.members || {});
+
+//       if (!members.length) return;
+
+//       const recipient = members.find((m) => m.user.id !== user.id);
+
+//       if (recipient) {
+//         navigation.setOptions({
+//           headerTitle: () => (
+//             <View style={{ flexDirection: "row", alignItems: "center" }}>
+//               {recipient.user.image ? (
+//                 <Avatar.Image
+//                   size={40}
+//                   source={{ uri: recipient.user.image }}
+//                 />
+//               ) : (
+//                 <Avatar.Text
+//                   size={40}
+//                   label={recipient.user.name?.[0].toUpperCase() || "U"}
+//                 />
+//               )}
+//               <Text style={{ marginLeft: 10, fontWeight: "bold", fontSize: 25,color:'white' }}>
+//                 {recipient.user.name || recipient.user.email}
+//               </Text>
+//             </View>
+//           ),
+//         });
+//       }
+//     }
+//   }, [channel, navigation, user]);
+// };
 
 const ChannelScreen = () => {
   const [channel, setChannel] = useState(null);
@@ -54,6 +96,7 @@ const ChannelScreen = () => {
           keyboardVerticalOffset={headerHeight + 20}
         >
           <Channel channel={channel}>
+            <UserHeader channel={channel} />
             <View style={styles.chatWrapper}>
               <MessageList />
               <MessageInput />

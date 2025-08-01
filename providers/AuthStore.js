@@ -36,7 +36,6 @@ export const useAuthStore = create((set) => ({
 
   login: async (email, password) => {
     set({ isLoading: true });
-    console.log(email, password);
     try {
       const result = await fetch(`${API_URL}/api/sign-in`, {
         method: "POST",
@@ -67,7 +66,7 @@ export const useAuthStore = create((set) => ({
         isLoading: false,
         isCheckingAuth: false,
       });
-      console.log("Login response:", json);
+
       return { success: true };
     } catch (error) {
       console.error("Error during login:", error);
