@@ -12,7 +12,7 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const [promptVisible, setPromptVisible] = useState(false);
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const { user } = useAuthStore();
+  const { user,token } = useAuthStore();
   const router = useRouter();
 
   const userId = user?.id;

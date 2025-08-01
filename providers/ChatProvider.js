@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Spinner from "react-native-loading-spinner-overlay";
-import { useTheme } from "react-native-paper";
 import { StreamChat } from "stream-chat";
 import { Chat, OverlayProvider } from "stream-chat-expo";
 import { useAuthStore } from "./AuthStore";
@@ -10,10 +9,8 @@ export const client = StreamChat.getInstance(STREAM_KEY);
 
 const ChatProvider = ({ children }) => {
   const [isReady, setIsReady] = useState(false);
-  const { user, token, logout } = useAuthStore();
+  const { user, token } = useAuthStore();
   const isSignedIn = user && token;
-
-  const theme = useTheme();
 
   useEffect(() => {
     if (!isSignedIn) {
@@ -21,8 +18,13 @@ const ChatProvider = ({ children }) => {
       return;
     }
 
-    if (!user || !token) {
-      console.log("No user or token found.");
+    if (!token) {
+      console.log("No token found.");
+      return;
+    }
+
+    if (!user) {
+      console.log("No user found.");
       return;
     }
 

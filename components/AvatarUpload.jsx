@@ -52,7 +52,6 @@ const AvatarUpload = ({ id }) => {
         }
 
         const data = await res.json();
-        console.log("Response data:", data);
       } catch (error) {
         console.error("Error uploading avatar:", error);
       } finally {

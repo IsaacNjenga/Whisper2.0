@@ -1,4 +1,5 @@
 import { client } from "@/app/_layout";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
 
@@ -10,6 +11,7 @@ export const useAuthStore = create((set) => ({
   token: null,
   isLoading: false,
   isCheckingAuth: true,
+  allUsers: null,
 
   register: async (username, email, password) => {
     set({ isLoading: true });
@@ -99,6 +101,38 @@ export const useAuthStore = create((set) => ({
       await client.disconnectUser();
     } catch (error) {
       console.error("Error during logout:", error);
+    }
+  },
+
+  usersFetch: async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/fetch-users`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const data = await res.json();
+      await AsyncStorage.setItem("users", JSON.stringify(data.users));
+
+      set({ allUsers: data.users });
+      return data.users;
+    } catch (error) {
+      console.error("Error during users fetch:", error);
+    }
+  },
+
+  loadUsersFromStorage: async () => {
+    try {
+      const stored = await AsyncStorage.getItem("users");
+      if (stored) {
+        set({ allUsers: JSON.parse(stored) });
+      }
+    } catch (error) {
+      console.error("Error loading users from storage:", error);
     }
   },
 }));

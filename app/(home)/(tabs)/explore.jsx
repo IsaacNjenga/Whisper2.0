@@ -6,43 +6,36 @@ import React, { useEffect, useState } from "react";
 import { FlatList, ImageBackground, StyleSheet } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 
-const API_URL = process.env.EXPO_PUBLIC_SERVER_URL;
-
 const ExploreScreen = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { user, token } = useAuthStore();
+  const { user, allUsers, usersFetch, loadUsersFromStorage } = useAuthStore();
 
   const userId = user?.id;
 
   useEffect(() => {
-    const fetchAllUsers = async () => {
+    const init = async () => {
       setLoading(true);
-      if (token === null) return;
       try {
-        const res = await fetch(`${API_URL}/api/fetch-users`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
+        if (!allUsers) {
+          const fetchedUsers = await usersFetch();
+          if (fetchedUsers) {
+            const filtered = fetchedUsers.filter((user) => user._id !== userId);
+            setUsers(filtered);
+          }
+        } else {
+          await loadUsersFromStorage();
+          const filtered = allUsers.filter((user) => user._id !== userId);
+          setUsers(filtered);
         }
-        const data = await res.json();
-
-        const filteredUsers = data.users.filter((user) => user._id !== userId);
-
-        setUsers(filteredUsers);
       } catch (error) {
         console.error("Error fetching users:", error.message);
       } finally {
         setLoading(false);
       }
     };
-    fetchAllUsers();
-  }, [userId, token]);
+    init();
+  }, [userId]);
 
   return (
     <>
