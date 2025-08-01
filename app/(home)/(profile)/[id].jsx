@@ -46,7 +46,7 @@ const UserProfile = () => {
       headerLeft: () => (
         <TouchableOpacity
           onPress={() => {
-            router.push("/");
+            router.replace("/");
             console.log("clicked");
           }}
           style={{ marginLeft: 10 }}
@@ -89,14 +89,14 @@ const UserProfile = () => {
             )}
 
             <Text style={{ fontWeight: "bold", marginTop: 10, fontSize: 20 }}>
-              @{userData?._id}
+              @{userData?.username}
             </Text>
           </View>
           <View style={styles.formContainer}>
             <View style={styles.innerContainer}>
               <View style={styles.details}>
                 <Text style={styles.label}>Username:</Text>
-                <Text style={styles.value}>John Doe</Text>
+                <Text style={styles.value}>{userData.username}</Text>
               </View>
 
               <View style={styles.details}>
