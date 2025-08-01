@@ -96,9 +96,9 @@ export const useAuthStore = create((set) => ({
     try {
       await SecureStore.deleteItemAsync("token");
       await SecureStore.deleteItemAsync("user");
+      await client.disconnectUser();
       set({ token: null, user: null });
       console.log("User logged out");
-      await client.disconnectUser();
     } catch (error) {
       console.error("Error during logout:", error);
     }
@@ -122,6 +122,23 @@ export const useAuthStore = create((set) => ({
       return data.users;
     } catch (error) {
       console.error("Error during users fetch:", error);
+    }
+  },
+
+  userFetch: async (id) => {
+    try {
+      const res = await fetch(`${API_URL}/api/fetch-user?id=${id}`, {
+        method: "GET",
+      });
+      
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const data = await res.json();
+
+      return data.userDetails;
+    } catch (error) {
+      console.error("Error during user fetch:", error);
     }
   },
 

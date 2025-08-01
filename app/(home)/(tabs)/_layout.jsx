@@ -10,7 +10,6 @@ const TabLayout = () => {
   const tabLabelMap = {
     index: "Chats",
     explore: "Explore",
-    //    profile: "Profile",
   };
 
   return (
@@ -42,7 +41,6 @@ const TabLayout = () => {
           const iconMap = {
             index: "chat-bubble",
             explore: "groups",
-            //profile: "person",
           };
           return (
             <MaterialIcons
@@ -61,20 +59,6 @@ const TabLayout = () => {
     >
       <Tabs.Screen name="index" options={{ title: "" }} />
       <Tabs.Screen name="explore" options={{ title: "Explore" }} />
-      {/* <Tabs.Screen
-        name="profile"
-        options={{
-          title: "Profile",
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => router.replace("/")}
-              style={{ marginLeft: 10 }}
-            >
-              <MaterialIcons name="chevron-left" size={25} />
-            </TouchableOpacity>
-          ),
-        }}
-      /> */}
     </Tabs>
   );
 };

@@ -51,6 +51,7 @@ const ExploreScreen = () => {
           contentContainerStyle={{
             gap: 3,
             backgroundColor: "rgba(220, 188, 188, 0)",
+            marginTop:3
           }}
           renderItem={({ item }) => <UserListView item={item} />}
         />
