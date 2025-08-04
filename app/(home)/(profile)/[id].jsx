@@ -96,7 +96,7 @@ const UserProfile = () => {
             <View style={styles.innerContainer}>
               <View style={styles.details}>
                 <Text style={styles.label}>Username:</Text>
-                <Text style={styles.value}>{userData.username}</Text>
+                <Text style={styles.value}>{userData?.username}</Text>
               </View>
 
               <View style={styles.details}>

@@ -102,7 +102,7 @@ const AvatarUpload = ({ id }) => {
           onPress={uploadAvatar}
         >
           <Text style={{ fontSize: 15, color: "#fff" }}>Change Image</Text>
-        </Button>{" "}
+        </Button>
         <Button
           mode="contained-tonal"
           style={{ marginTop: 10 }}

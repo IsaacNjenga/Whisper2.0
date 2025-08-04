@@ -51,24 +51,7 @@ const ChatProvider = ({ children }) => {
   }, [user, token]);
 
   if (!isReady) {
-    return (
-      // <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      //   <ActivityIndicator size="large" color={theme.colors.primary} />{" "}
-      //   <Text
-      //     style={{
-      //       marginTop: 10,
-      //       fontSize: 18,
-      //       color: "#333",
-      //     }}
-      //   >
-      //     Setting you up...
-      //   </Text>
-      //   <Button onPress={logout}>
-      //     <Text>Logout</Text>
-      //   </Button>
-      // </View>
-      <Spinner textContent="Setting you up..." />
-    );
+    return <Spinner textContent="Setting you up..." />;
   }
 
   return (
